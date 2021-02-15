@@ -3,12 +3,12 @@
 #include <ArduinoJson.h>
 
 /**** Remplace ces trois vars*/
-const char* ssid = "TON WIFI";
-const char* password = "WIFI PW";
+const char* ssid = "paU1m4rT1n3TTi";
+const char* password = "c4fa1$v1ngt4n5";
 // chez David
-const char* projet_uri = "http://192.168.0.33:3001/projet";
+//const char* projet_uri = "http://192.168.0.33:3001/projet";
 // chez Paul
-//const char* projet_uri = "http://10.0.0.251:3001/projet";
+const char* projet_uri = "http://10.0.0.251:3001/projet";
 
 void setup() {
 
@@ -37,6 +37,8 @@ void setup() {
 void loop() {
 
   String projJson;
+  projJson.reserve(500);
+
   HTTPClient http;
   // il faut mettre l'adresse wifi de l'ordi
   http.begin(projet_uri);
@@ -59,17 +61,17 @@ void loop() {
   DeserializationError err = deserializeJson(doc, projJson);
 
   struct pr {
-    float id;
+    uint8_t id;
     char nom[40] = {NULL};
-    float delayStart;
-    float rampePWM;
-    float pulseWelding;
+    uint16_t delayStart;
+    uint16_t rampePWM;
+    uint16_t pulseWelding;
     float speedBalayage;
     float speedWelding;
     float speedWire;
     float balayage;
-    float pulseWire;
-    float retractWire;
+    uint8_t pulseWire;
+    uint8_t retractWire;
   };
   typedef struct pr Projet;
   Projet pr;
@@ -95,9 +97,9 @@ void loop() {
   } else {
     Serial.print(err.c_str());
   }
-// rampePWM
+  // rampePWM
   if (doc["rampePWM"]) {
-    pr.id = doc["rampePWM"];
+    pr.rampePWM = doc["rampePWM"];
     Serial.print("rampePWM = "); Serial.println(pr.rampePWM);
   } else {
     Serial.print(err.c_str());
